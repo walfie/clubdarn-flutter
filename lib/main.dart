@@ -47,17 +47,69 @@ class SearchBar extends StatefulWidget {
 
 enum SearchType { song, artist, series }
 
+class RadioOption<T> extends StatelessWidget {
+  const RadioOption({
+    Key key,
+    this.title,
+    this.selected = false,
+    @required this.value,
+    @required this.groupValue,
+    @required this.onChanged,
+  })  : assert(selected != null),
+        super(key: key);
+
+  final T value;
+  final T groupValue;
+  final ValueChanged<T> onChanged;
+  final Widget title;
+  final bool selected;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkResponse(
+      onTap: onChanged != null
+          ? () {
+              onChanged(value);
+            }
+          : null,
+      child: Row(
+        children: [
+          Radio(
+            key: key,
+            onChanged: onChanged,
+            groupValue: groupValue,
+            value: value,
+          ),
+          Flexible(child: title),
+        ],
+      ),
+    );
+  }
+}
+
 class _SearchBarState extends State<SearchBar> {
+  String _query = "";
   SearchType _searchType = SearchType.song;
 
   @override
   Widget build(BuildContext context) {
+    var setSearchType = (SearchType value) {
+      setState(() {
+        _searchType = value;
+      });
+    };
+
     return Container(
       child: Column(
         children: [
           Container(
             padding: EdgeInsets.all(16.0),
-            child: TextFormField(
+            child: TextField(
+              onChanged: (String text) {
+                setState(() {
+                  _query = text;
+                });
+              },
               decoration: InputDecoration(
                 hintText: 'Search',
                 isDense: true,
@@ -70,45 +122,36 @@ class _SearchBarState extends State<SearchBar> {
               ),
             ),
           ),
-          Row(
-            children: [
-              Flexible(
-                child: RadioListTile<SearchType>(
-                  title: Text("Song"),
-                  value: SearchType.song,
-                  groupValue: _searchType,
-                  onChanged: (SearchType value) {
-                    setState(() {
-                      _searchType = value;
-                    });
-                  },
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 24.0),
+            child: Row(
+              children: [
+                Flexible(
+                  child: RadioOption<SearchType>(
+                    title: Text("Song"),
+                    value: SearchType.song,
+                    groupValue: _searchType,
+                    onChanged: setSearchType,
+                  ),
                 ),
-              ),
-              Flexible(
-                child: RadioListTile<SearchType>(
-                  title: Text("Artist"),
-                  value: SearchType.artist,
-                  groupValue: _searchType,
-                  onChanged: (SearchType value) {
-                    setState(() {
-                      _searchType = value;
-                    });
-                  },
+                Flexible(
+                  child: RadioOption<SearchType>(
+                    title: Text("Artist"),
+                    value: SearchType.artist,
+                    groupValue: _searchType,
+                    onChanged: setSearchType,
+                  ),
                 ),
-              ),
-              Flexible(
-                child: RadioListTile<SearchType>(
-                  title: Text("Series"),
-                  value: SearchType.series,
-                  groupValue: _searchType,
-                  onChanged: (SearchType value) {
-                    setState(() {
-                      _searchType = value;
-                    });
-                  },
+                Flexible(
+                  child: RadioOption<SearchType>(
+                    title: Text("Series"),
+                    value: SearchType.series,
+                    groupValue: _searchType,
+                    onChanged: setSearchType,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),
