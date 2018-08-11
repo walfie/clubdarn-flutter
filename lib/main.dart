@@ -29,12 +29,88 @@ class _ClubDarnState extends State<ClubDarn> {
           ),
           body: TabBarView(
             children: [
-              Text("Search"),
+              SearchBar(),
               Text("Rankings"),
               Text("Settings"),
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class SearchBar extends StatefulWidget {
+  @override
+  _SearchBarState createState() => _SearchBarState();
+}
+
+enum SearchType { song, artist, series }
+
+class _SearchBarState extends State<SearchBar> {
+  SearchType _searchType = SearchType.song;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.all(16.0),
+            child: TextFormField(
+              decoration: InputDecoration(
+                hintText: 'Search',
+                isDense: true,
+                suffixIcon: IconButton(
+                  icon: Icon(Icons.search),
+                  onPressed: () {
+                    // TODO
+                  },
+                ),
+              ),
+            ),
+          ),
+          Row(
+            children: [
+              Flexible(
+                child: RadioListTile<SearchType>(
+                  title: Text("Song"),
+                  value: SearchType.song,
+                  groupValue: _searchType,
+                  onChanged: (SearchType value) {
+                    setState(() {
+                      _searchType = value;
+                    });
+                  },
+                ),
+              ),
+              Flexible(
+                child: RadioListTile<SearchType>(
+                  title: Text("Artist"),
+                  value: SearchType.artist,
+                  groupValue: _searchType,
+                  onChanged: (SearchType value) {
+                    setState(() {
+                      _searchType = value;
+                    });
+                  },
+                ),
+              ),
+              Flexible(
+                child: RadioListTile<SearchType>(
+                  title: Text("Series"),
+                  value: SearchType.series,
+                  groupValue: _searchType,
+                  onChanged: (SearchType value) {
+                    setState(() {
+                      _searchType = value;
+                    });
+                  },
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
