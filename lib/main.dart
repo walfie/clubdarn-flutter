@@ -91,14 +91,23 @@ class _SearchBarState extends State<SearchBar> {
   String _query = "";
   SearchType _searchType = SearchType.song;
 
+  Widget _radioOption(String title, SearchType searchType) {
+    return Flexible(
+      child: RadioOption<SearchType>(
+        title: Text(title),
+        value: searchType,
+        groupValue: _searchType,
+        onChanged: (SearchType value) {
+          setState(() {
+            _searchType = value;
+          });
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    var setSearchType = (SearchType value) {
-      setState(() {
-        _searchType = value;
-      });
-    };
-
     return Container(
       child: Column(
         children: [
@@ -126,30 +135,9 @@ class _SearchBarState extends State<SearchBar> {
             padding: EdgeInsets.symmetric(horizontal: 24.0),
             child: Row(
               children: [
-                Flexible(
-                  child: RadioOption<SearchType>(
-                    title: Text("Song"),
-                    value: SearchType.song,
-                    groupValue: _searchType,
-                    onChanged: setSearchType,
-                  ),
-                ),
-                Flexible(
-                  child: RadioOption<SearchType>(
-                    title: Text("Artist"),
-                    value: SearchType.artist,
-                    groupValue: _searchType,
-                    onChanged: setSearchType,
-                  ),
-                ),
-                Flexible(
-                  child: RadioOption<SearchType>(
-                    title: Text("Series"),
-                    value: SearchType.series,
-                    groupValue: _searchType,
-                    onChanged: setSearchType,
-                  ),
-                ),
+                _radioOption("Song", SearchType.song),
+                _radioOption("Artist", SearchType.artist),
+                _radioOption("Series", SearchType.series),
               ],
             ),
           ),
