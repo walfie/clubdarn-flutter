@@ -29,7 +29,13 @@ class _ClubDarnState extends State<ClubDarn> {
           ),
           body: TabBarView(
             children: [
-              SearchBar(),
+              SearchBar(
+                onSubmitted: (SearchValues value) {
+                  // TODO
+                  debugPrint(value.query);
+                  debugPrint(value.searchType.toString());
+                },
+              ),
               Text("Rankings"),
               Text("Settings"),
             ],
@@ -41,11 +47,23 @@ class _ClubDarnState extends State<ClubDarn> {
 }
 
 class SearchBar extends StatefulWidget {
+  const SearchBar({
+    Key key,
+    this.onSubmitted,
+  }) : super(key: key);
+
+  final ValueChanged<SearchValues> onSubmitted;
+
   @override
   _SearchBarState createState() => _SearchBarState();
 }
 
 enum SearchType { song, artist, series }
+
+class SearchValues {
+  String query = "";
+  SearchType searchType = SearchType.song;
+}
 
 class RadioOption<T> extends StatelessWidget {
   const RadioOption({
@@ -88,18 +106,17 @@ class RadioOption<T> extends StatelessWidget {
 }
 
 class _SearchBarState extends State<SearchBar> {
-  String _query = "";
-  SearchType _searchType = SearchType.song;
+  SearchValues _state = SearchValues();
 
   Widget _radioOption(String title, SearchType searchType) {
     return Flexible(
       child: RadioOption<SearchType>(
         title: Text(title),
         value: searchType,
-        groupValue: _searchType,
+        groupValue: _state.searchType,
         onChanged: (SearchType value) {
           setState(() {
-            _searchType = value;
+            _state.searchType = value;
           });
         },
       ),
@@ -112,12 +129,15 @@ class _SearchBarState extends State<SearchBar> {
       child: Column(
         children: [
           Container(
-            padding: EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
             child: TextField(
               onChanged: (String text) {
                 setState(() {
-                  _query = text;
+                  _state.query = text;
                 });
+              },
+              onSubmitted: (_) {
+                widget.onSubmitted(_state);
               },
               decoration: InputDecoration(
                 hintText: 'Search',
@@ -125,14 +145,14 @@ class _SearchBarState extends State<SearchBar> {
                 suffixIcon: IconButton(
                   icon: Icon(Icons.search),
                   onPressed: () {
-                    // TODO
+                    widget.onSubmitted(_state);
                   },
                 ),
               ),
             ),
           ),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 24.0),
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: Row(
               children: [
                 _radioOption("Song", SearchType.song),
