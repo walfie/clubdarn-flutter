@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import "package:flutter/foundation.dart";
 
 enum SearchType { song, artist, series }
 
@@ -7,13 +7,31 @@ class SearchValues {
   SearchType searchType = SearchType.song;
 }
 
+class Page<T> {
+  const Page({
+    @required this.page,
+    @required this.artistCategoryId,
+    this.seriesCategoryId,
+    @required this.totalItems,
+    @required this.totalPages,
+    @required this.items,
+  });
+
+  final int page;
+  final String artistCategoryId;
+  final String seriesCategoryId;
+  final int totalItems;
+  final int totalPages;
+  final List<T> items;
+}
+
 class Artist {
   const Artist({
     @required this.id,
     @required this.name,
   });
 
-  final num id;
+  final int id;
   final String name;
 }
 
@@ -29,7 +47,7 @@ class Song {
     this.hasVideo,
   });
 
-  final num id;
+  final int id;
   final String title;
   final Artist artist;
   final String dateAdded;

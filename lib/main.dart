@@ -1,46 +1,74 @@
+import 'dart:async';
+
 import "package:flutter/material.dart";
 
 import "models.dart";
+import "searcher.dart";
 import "widgets/search_bar.dart";
 import "widgets/search_result.dart";
+import "widgets/search_results.dart";
 
 class ClubDarn extends StatefulWidget {
+  ClubDarn({
+    @required this.searcher,
+  });
+
+  final Searcher searcher;
+
   @override
   _ClubDarnState createState() => _ClubDarnState();
 }
 
 class _ClubDarnState extends State<ClubDarn> {
+  Future<SearchResultsWidget> _searchResultsView = null;
+
+  Future<SearchResultsWidget> _executeSearch(SearchValues value) {
+    switch (value.searchType) {
+      case SearchType.song:
+        return widget.searcher.getSongsByTitle(value.query).then((results) {
+          return SongSearchResults(songs: results);
+        });
+
+      case SearchType.artist:
+        return widget.searcher.getArtistsByName(value.query).then((results) {
+          return ArtistSearchResults(artists: results);
+        });
+
+      default:
+        // TODO
+        return widget.searcher.getArtistsByName(value.query).then((results) {
+          return ArtistSearchResults(artists: results);
+        });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final searchTab = Column(
       children: [
         SearchBar(
           onSubmitted: (SearchValues value) {
-            // TODO
-            debugPrint(value.query);
-            debugPrint(value.searchType.toString());
+            setState(() {
+              _searchResultsView = _executeSearch(value);
+            });
           },
         ),
         Divider(),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            SongSearchResult(
-              song: Song(
-                id: 360715,
-                title: "アイドル活動!",
-                series: "アイカツ!",
-                dateAdded: "2013/03/30",
-                lyrics: "さぁ! 行こう 光る未来へ ホラ",
-                hasVideo: true,
-                artist: Artist(
-                  id: 91801,
-                  name: "わか、ふうり、すなお from STAR☆ANIS",
-                ),
-              ),
-            ),
-          ],
-        ),
+        FutureBuilder(
+            future: _searchResultsView,
+            builder: (context, snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.none:
+                  return Text("");
+                case ConnectionState.waiting:
+                  return CircularProgressIndicator();
+                default:
+                  if (snapshot.hasError)
+                    return new Text('Error: ${snapshot.error}');
+                  else
+                    return snapshot.data;
+              }
+            }),
       ],
     );
 
@@ -49,7 +77,9 @@ class _ClubDarnState extends State<ClubDarn> {
       Text("Rankings"),
       Text("Settings"),
     ].map((widget) {
-      return Padding(padding: EdgeInsets.all(16.0), child: widget);
+      return SingleChildScrollView(
+        child: Padding(padding: EdgeInsets.all(16.0), child: widget),
+      );
     }).toList(growable: false);
 
     return MaterialApp(
@@ -71,7 +101,7 @@ class _ClubDarnState extends State<ClubDarn> {
               ],
             ),
           ),
-          body: TabBarView(children: tabs),
+          body: TabBarView(children: tabs, physics: const ScrollPhysics()),
         ),
       ),
     );
@@ -79,5 +109,6 @@ class _ClubDarnState extends State<ClubDarn> {
 }
 
 void main() {
-  runApp(ClubDarn());
+  Searcher searcher = Searcher();
+  runApp(ClubDarn(searcher: searcher));
 }

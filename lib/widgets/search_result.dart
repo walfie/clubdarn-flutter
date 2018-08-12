@@ -2,6 +2,8 @@ import "package:flutter/material.dart";
 
 import "../models.dart";
 
+bool _notNull(Object o) => o != null;
+
 class SearchResult extends StatelessWidget {
   const SearchResult({
     Key key,
@@ -37,11 +39,13 @@ class SearchResult extends StatelessWidget {
                       style: const TextStyle(fontSize: 18.0),
                     ),
                   ),
-                  Text(id),
-                ],
+                  id != null ? Text(id) : null,
+                ].where(_notNull).toList(),
               ),
-              Text(subtitle, textAlign: TextAlign.right),
-            ],
+              subtitle != null
+                  ? Text(subtitle, textAlign: TextAlign.right)
+                  : null,
+            ].where(_notNull).toList(),
           ),
         ),
       ),
@@ -108,7 +112,7 @@ class SongSearchResult extends StatelessWidget {
       _row(Icon(Icons.date_range), song.dateAdded),
       _row(Icon(Icons.sms), song.lyrics),
       _row(Icon(Icons.movie), song.hasVideo == true ? "Has music video" : null),
-    ].where((o) => o != null).toList();
+    ].where(_notNull).toList();
 
     return SearchResult(
       id: idString,
@@ -137,6 +141,24 @@ class SongSearchResult extends StatelessWidget {
           },
         );
       },
+    );
+  }
+}
+
+class ArtistSearchResult extends StatelessWidget {
+  const ArtistSearchResult({
+    Key key,
+    @required this.artist,
+    this.onTap,
+  }) : super(key: key);
+
+  final Artist artist;
+  final Function(Artist) onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return SearchResult(
+      title: artist.name,
     );
   }
 }
