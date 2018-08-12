@@ -39,18 +39,23 @@ class ArtistSearchResults extends SearchResultsWidget {
   const ArtistSearchResults({
     Key key,
     this.title,
+    this.onTap,
     @required this.artists,
   }) : super(key: key);
 
   final String title;
   final List<Artist> artists;
+  final Function(Artist) onTap;
 
   @override
   Widget build(BuildContext context) {
     final items = artists.map((artist) {
       return Padding(
         padding: EdgeInsets.only(bottom: 10.0),
-        child: ArtistSearchResult(artist: artist),
+        child: ArtistSearchResult(
+          artist: artist,
+          onTap: onTap,
+        ),
       );
     }).toList();
 

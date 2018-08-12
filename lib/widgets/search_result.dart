@@ -159,6 +159,9 @@ class ArtistSearchResult extends StatelessWidget {
   Widget build(BuildContext context) {
     return SearchResult(
       title: artist.name,
+      onTap: () {
+        return onTap(artist);
+      },
     );
   }
 }

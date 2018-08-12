@@ -25,13 +25,23 @@ class _ClubDarnState extends State<ClubDarn> {
   Future<SearchResultsWidget> _executeSearch(SearchValues value) {
     switch (value.searchType) {
       case SearchType.song:
-        return widget.searcher.getSongsByTitle(value.query).then((results) {
-          return SongSearchResults(songs: results);
+        return widget.searcher.getSongsByTitle(value.query).then((songs) {
+          return SongSearchResults(songs: songs);
         });
 
       case SearchType.artist:
-        return widget.searcher.getArtistsByName(value.query).then((results) {
-          return ArtistSearchResults(artists: results);
+        return widget.searcher.getArtistsByName(value.query).then((artists) {
+          return ArtistSearchResults(
+            artists: artists,
+            onTap: (artist) {
+              setState(() {
+                _searchResultsView =
+                    widget.searcher.getSongsByArtistId(artist.id).then((songs) {
+                  return SongSearchResults(title: artist.name, songs: songs);
+                });
+              });
+            },
+          );
         });
 
       default:
