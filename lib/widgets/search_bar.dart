@@ -38,12 +38,10 @@ class _SearchBarState extends State<SearchBar> {
       child: Column(
         children: [
           Container(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.only(bottom: 16.0),
             child: TextField(
               onChanged: (String text) {
-                setState(() {
-                  _state.query = text;
-                });
+                _state.query = text;
               },
               onSubmitted: (_) {
                 widget.onSubmitted(_state);
@@ -61,7 +59,7 @@ class _SearchBarState extends State<SearchBar> {
             ),
           ),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Row(
               children: [
                 _radioOption("Song", SearchType.song),
