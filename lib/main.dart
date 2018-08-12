@@ -25,10 +25,19 @@ class _ClubDarnState extends State<ClubDarn> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SearchResult(
-              id: "3607-15",
-              title: "アイドル活動!",
-              subtitle: "わか、ふうり、すなお from STAR☆ANIS",
+            SongSearchResult(
+              song: Song(
+                id: 360715,
+                title: "アイドル活動!",
+                series: "アイカツ!",
+                dateAdded: "2013/03/30",
+                lyrics: "さぁ! 行こう 光る未来へ ホラ",
+                hasVideo: true,
+                artist: Artist(
+                  id: 91801,
+                  name: "わか、ふうり、すなお from STAR☆ANIS",
+                ),
+              ),
             ),
           ],
         ),
