@@ -5,9 +5,10 @@ import "../models.dart";
 class SearchResult extends StatelessWidget {
   const SearchResult({
     Key key,
+    this.id,
     @required this.title,
     this.subtitle,
-    this.id,
+    this.badge,
     this.onTap,
   }) : super(key: key);
 
@@ -15,10 +16,11 @@ class SearchResult extends StatelessWidget {
   final String title;
   final String subtitle;
   final String id;
+  final String badge;
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    final card = Card(
       elevation: 6.0,
       child: InkWell(
         onTap: onTap,
@@ -44,6 +46,26 @@ class SearchResult extends StatelessWidget {
         ),
       ),
     );
+
+    if (badge == null) {
+      return card;
+    } else {
+      return Stack(
+        overflow: Overflow.visible,
+        children: [
+          card,
+          Positioned(
+            right: -6.0,
+            top: -6.0,
+            child: CircleAvatar(
+              child: Text(badge, style: const TextStyle(fontSize: 14.0)),
+              backgroundColor: Theme.of(context).primaryColorLight,
+              radius: 15.0,
+            ),
+          ),
+        ],
+      );
+    }
   }
 }
 
@@ -92,6 +114,7 @@ class SongSearchResult extends StatelessWidget {
       id: idString,
       title: song.title,
       subtitle: song.artist.name,
+      badge: song.hasVideo ? "\u{1F3AC}" : null,
       onTap: () {
         showDialog(
           context: context,
