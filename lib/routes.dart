@@ -9,6 +9,10 @@ import "widgets/subpage.dart";
 import "widgets/search_results.dart";
 
 class Routes {
+  static String songsByArtistId(int artistId, {String pageTitle = ""}) {
+    return "/artists/$artistId/songs?pageTitle=${Uri.encodeQueryComponent(pageTitle)}";
+  }
+
   static void configureRoutes(Router router, Searcher searcher) {
     final songsByArtistId = Handler(handlerFunc: (context, params) {
       final artistId = int.tryParse(params["artistId"]?.first) ?? 0;

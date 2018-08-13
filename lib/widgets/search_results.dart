@@ -3,7 +3,7 @@ import 'dart:async';
 import "package:flutter/material.dart";
 
 import "search_result.dart";
-import "subpage.dart"; // TODO: Remove
+import "../routes.dart";
 import "../models.dart";
 
 abstract class SearchResultsWidget extends StatelessWidget {
@@ -85,9 +85,10 @@ class ArtistSearchResults extends SearchResultsWidget {
         child: ArtistSearchResult(
           artist: artist,
           onTap: (artist) {
-            // TODO: Type-safe way to construct these paths
-            Navigator.pushNamed(context,
-                "/artists/${artist.id}/songs?pageTitle=${Uri.encodeQueryComponent(artist.name)}");
+            Navigator.pushNamed(
+              context,
+              Routes.songsByArtistId(artist.id, pageTitle: artist.name),
+            );
           },
         ),
       );
