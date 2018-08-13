@@ -78,6 +78,7 @@ class _ClubDarnState extends State<ClubDarn> {
       );
     }).toList(growable: false);
 
+    // TODO: Tap tab to scroll to top
     return MaterialApp(
       theme: ThemeData(primarySwatch: Colors.teal),
       onGenerateRoute: _router.generator,

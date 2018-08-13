@@ -31,17 +31,30 @@ class Searcher {
 
   Random _rng = Random(); // TODO: Temporary solution
 
-  Future<List<Song>> getSongsByTitle(String title) async {
+  Future<Page<Song>> getSongsByTitle(String title) async {
     await Future.delayed(const Duration(milliseconds: 250));
-    return List.filled(_rng.nextInt(8) + 1, _song);
+    return Page(
+      artistCategoryId: "010000",
+      items: List.filled(_rng.nextInt(8) + 1, _song),
+    );
   }
 
-  Future<List<Artist>> getArtistsByName(String name) async {
+  Future<Page<Artist>> getArtistsByName(String name) async {
     await Future.delayed(const Duration(milliseconds: 250));
-    return List.filled(_rng.nextInt(8) + 1, _artist);
+
+    return Page(
+      artistCategoryId: "010000",
+      items: List.filled(_rng.nextInt(8) + 1, _artist),
+    );
   }
 
-  Future<List<Song>> getSongsByArtistId(int id) async {
-    return List.filled(_rng.nextInt(8) + 1, _song);
+  Future<Page<Song>> getSongsByArtistId(int id) async {
+    // TODO
+    await Future.delayed(const Duration(milliseconds: 250));
+    return Page(
+      artistCategoryId: "010000",
+      seriesCategoryId: "050100",
+      items: List.filled(_rng.nextInt(8) + 1, _song),
+    );
   }
 }

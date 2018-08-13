@@ -11,7 +11,6 @@ import "widgets/search_results.dart";
 class Routes {
   static void configureRoutes(Router router, Searcher searcher) {
     final songsByArtistId = Handler(handlerFunc: (context, params) {
-      debugPrint(params.toString());
       final artistId = int.tryParse(params["artistId"]?.first) ?? 0;
       final title = params["pageTitle"]?.first;
 

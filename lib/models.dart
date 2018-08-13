@@ -9,19 +9,13 @@ class SearchValues {
 
 class Page<T> {
   const Page({
-    @required this.page,
     @required this.artistCategoryId,
     this.seriesCategoryId,
-    @required this.totalItems,
-    @required this.totalPages,
     @required this.items,
   });
 
-  final int page;
   final String artistCategoryId;
   final String seriesCategoryId;
-  final int totalItems;
-  final int totalPages;
   final List<T> items;
 }
 

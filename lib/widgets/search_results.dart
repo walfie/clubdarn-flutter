@@ -49,11 +49,11 @@ class SongSearchResults extends SearchResultsWidget {
   }) : super(key: key);
 
   final String title;
-  final List<Song> songs;
+  final Page<Song> songs;
 
   @override
   Widget build(BuildContext context) {
-    final items = songs.map((song) {
+    final items = songs.items.map((song) {
       return Padding(
         padding: EdgeInsets.only(bottom: 10.0),
         child: SongSearchResult(song: song),
@@ -75,11 +75,11 @@ class ArtistSearchResults extends SearchResultsWidget {
   }) : super(key: key);
 
   final String title;
-  final List<Artist> artists;
+  final Page<Artist> artists;
 
   @override
   Widget build(BuildContext context) {
-    final items = artists.map((artist) {
+    final items = artists.items.map((artist) {
       return Padding(
         padding: EdgeInsets.only(bottom: 10.0),
         child: ArtistSearchResult(
