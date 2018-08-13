@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 
 import "../models.dart";
+import "../routes.dart";
 
 bool _notNull(Object o) => o != null;
 
@@ -81,8 +82,8 @@ class SongSearchResult extends StatelessWidget {
 
   final Song song;
 
-  Widget _row(Icon icon, String text) {
-    if (text == null) {
+  Widget _row(Icon icon, Widget content) {
+    if (content == null) {
       return null;
     }
 
@@ -94,7 +95,7 @@ class SongSearchResult extends StatelessWidget {
             padding: const EdgeInsets.only(right: 10.0),
             child: icon,
           ),
-          Expanded(child: Text(text)),
+          Expanded(child: content),
         ],
       ),
     );
@@ -105,13 +106,30 @@ class SongSearchResult extends StatelessWidget {
     // TODO: Add helper
     final idString = song.id.toString().replaceRange(4, 4, "-");
 
+    final artistName = GestureDetector(
+      child: Text(
+        song.artist.name,
+        style: TextStyle(
+          color: Theme.of(context).primaryColorDark,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      onTap: () {
+        Navigator.pushNamed(
+          context,
+          Routes.songsByArtistId(song.artist.id, pageTitle: song.artist.name),
+        );
+      },
+    );
+
     final rows = [
-      _row(Icon(Icons.music_note), song.title),
-      _row(Icon(Icons.person), song.artist.name), // TODO: Clickable
-      _row(Icon(Icons.local_movies), song.series),
-      _row(Icon(Icons.date_range), song.dateAdded),
-      _row(Icon(Icons.sms), song.lyrics),
-      _row(Icon(Icons.movie), song.hasVideo == true ? "Has music video" : null),
+      _row(Icon(Icons.music_note), Text(song.title)),
+      _row(Icon(Icons.person), artistName),
+      _row(Icon(Icons.local_movies), Text(song.series)),
+      _row(Icon(Icons.date_range), Text(song.dateAdded)),
+      _row(Icon(Icons.sms), Text(song.lyrics)),
+      _row(Icon(Icons.movie),
+          song.hasVideo == true ? Text("Has music video") : null),
     ].where(_notNull).toList();
 
     return SearchResult(
