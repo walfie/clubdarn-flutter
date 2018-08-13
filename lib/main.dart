@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import "package:flutter/material.dart";
+import 'package:fluro/fluro.dart';
 
 import "models.dart";
 import "searcher.dart";
+import "routes.dart";
 import "widgets/search_bar.dart";
 import "widgets/search_result.dart";
 import "widgets/search_results.dart";
@@ -16,27 +18,35 @@ class ClubDarn extends StatefulWidget {
   final Searcher searcher;
 
   @override
-  _ClubDarnState createState() => _ClubDarnState();
+  _ClubDarnState createState() => _ClubDarnState(searcher: searcher);
 }
 
 class _ClubDarnState extends State<ClubDarn> {
+  _ClubDarnState({@required this.searcher}) {
+    _router = Router();
+    Routes.configureRoutes(_router, searcher);
+  }
+
+  Router _router;
+  Searcher searcher;
+
   Future<SearchResultsWidget> _searchResultsView = null;
 
   Future<SearchResultsWidget> _executeSearch(SearchValues value) {
     switch (value.searchType) {
       case SearchType.song:
-        return widget.searcher.getSongsByTitle(value.query).then((songs) {
+        return searcher.getSongsByTitle(value.query).then((songs) {
           return SongSearchResults(songs: songs);
         });
 
       case SearchType.artist:
-        return widget.searcher.getArtistsByName(value.query).then((artists) {
+        return searcher.getArtistsByName(value.query).then((artists) {
           return ArtistSearchResults(artists: artists);
         });
 
       default:
         // TODO
-        return widget.searcher.getArtistsByName(value.query).then((results) {
+        return searcher.getArtistsByName(value.query).then((results) {
           return ArtistSearchResults(artists: results);
         });
     }
@@ -70,6 +80,7 @@ class _ClubDarnState extends State<ClubDarn> {
 
     return MaterialApp(
       theme: ThemeData(primarySwatch: Colors.teal),
+      onGenerateRoute: _router.generator,
       home: DefaultTabController(
         length: 3,
         child: Scaffold(

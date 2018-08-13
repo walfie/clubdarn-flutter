@@ -85,16 +85,9 @@ class ArtistSearchResults extends SearchResultsWidget {
         child: ArtistSearchResult(
           artist: artist,
           onTap: (artist) {
-            // TODO: Use named route
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => Subpage(
-                      title: artist.name,
-                      child: Text(artist.name),
-                    ),
-              ),
-            );
+            // TODO: Type-safe way to construct these paths
+            Navigator.pushNamed(context,
+                "/artists/${artist.id}/songs?pageTitle=${Uri.encodeQueryComponent(artist.name)}");
           },
         ),
       );
