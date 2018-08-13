@@ -31,17 +31,7 @@ class _ClubDarnState extends State<ClubDarn> {
 
       case SearchType.artist:
         return widget.searcher.getArtistsByName(value.query).then((artists) {
-          return ArtistSearchResults(
-            artists: artists,
-            onTap: (artist) {
-              setState(() {
-                _searchResultsView =
-                    widget.searcher.getSongsByArtistId(artist.id).then((songs) {
-                  return SongSearchResults(title: artist.name, songs: songs);
-                });
-              });
-            },
-          );
+          return ArtistSearchResults(artists: artists);
         });
 
       default:
@@ -64,21 +54,7 @@ class _ClubDarnState extends State<ClubDarn> {
           },
         ),
         Divider(),
-        FutureBuilder(
-            future: _searchResultsView,
-            builder: (context, snapshot) {
-              switch (snapshot.connectionState) {
-                case ConnectionState.none:
-                  return Text("");
-                case ConnectionState.waiting:
-                  return CircularProgressIndicator();
-                default:
-                  if (snapshot.hasError)
-                    return new Text('Error: ${snapshot.error}');
-                  else
-                    return snapshot.data;
-              }
-            }),
+        FutureSearchResults(future: _searchResultsView),
       ],
     );
 
@@ -111,7 +87,7 @@ class _ClubDarnState extends State<ClubDarn> {
               ],
             ),
           ),
-          body: TabBarView(children: tabs, physics: const ScrollPhysics()),
+          body: TabBarView(children: tabs),
         ),
       ),
     );

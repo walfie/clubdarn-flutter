@@ -32,10 +32,12 @@ class Searcher {
   Random _rng = Random(); // TODO: Temporary solution
 
   Future<List<Song>> getSongsByTitle(String title) async {
+    await Future.delayed(const Duration(milliseconds: 250));
     return List.filled(_rng.nextInt(8) + 1, _song);
   }
 
   Future<List<Artist>> getArtistsByName(String name) async {
+    await Future.delayed(const Duration(milliseconds: 250));
     return List.filled(_rng.nextInt(8) + 1, _artist);
   }
 
