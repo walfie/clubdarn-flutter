@@ -51,6 +51,11 @@ class Song {
   final bool hasVideo;
 }
 
+class Series {
+  const Series({@required this.title});
+  final String title;
+}
+
 class CategoryDescription {
   const CategoryDescription({
     @required this.en,

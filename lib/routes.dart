@@ -17,6 +17,11 @@ class Routes {
     return "/categories/$categoryId/songs?pageTitle=${Uri.encodeQueryComponent(pageTitle)}";
   }
 
+  static String songsForSeries(String seriesTitle,
+      {String categoryId = "050100"}) {
+    return "/categories/$categoryId/series/${Uri.encodeComponent(seriesTitle)}";
+  }
+
   static void configureRoutes(Router router, Searcher searcher) {
     final songsByArtistId = Handler(handlerFunc: (context, params) {
       final artistId = int.tryParse(params["artistId"]?.first) ?? 0;
@@ -43,5 +48,22 @@ class Routes {
     });
 
     router.define("/categories/:categoryId/songs", handler: songsForCategoryId);
+
+    final songsForSeries = Handler(handlerFunc: (context, params) {
+      final categoryId = params["categoryId"]?.first;
+      final seriesTitle = Uri.decodeComponent(params["seriesTitle"]?.first);
+
+      final future = searcher
+          .getSongsForSeries(seriesTitle, categoryId: categoryId)
+          .then((songs) {
+        return SongSearchResults(songs: songs);
+      });
+
+      return Subpage(
+          title: seriesTitle, child: FutureSearchResults(future: future));
+    });
+
+    router.define("/categories/:categoryId/series/:seriesTitle",
+        handler: songsForSeries);
   }
 }

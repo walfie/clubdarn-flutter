@@ -189,6 +189,27 @@ class ArtistSearchResult extends StatelessWidget {
   }
 }
 
+class SeriesSearchResult extends StatelessWidget {
+  const SeriesSearchResult({
+    Key key,
+    @required this.series,
+    this.onTap,
+  }) : super(key: key);
+
+  final Series series;
+  final Function(Series) onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return SearchResult(
+      title: series.title,
+      onTap: () {
+        return onTap(series);
+      },
+    );
+  }
+}
+
 class CategorySearchResult extends StatelessWidget {
   const CategorySearchResult({
     Key key,

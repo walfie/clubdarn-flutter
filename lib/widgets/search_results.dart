@@ -46,12 +46,10 @@ class FutureSearchResults extends SearchResultsWidget {
 class SongSearchResults extends SearchResultsWidget {
   const SongSearchResults({
     Key key,
-    this.title,
     this.groupByDate = false,
     @required this.songs,
   }) : super(key: key);
 
-  final String title;
   final bool groupByDate;
   final Page<Song> songs;
 
@@ -99,11 +97,9 @@ class SongSearchResults extends SearchResultsWidget {
 class ArtistSearchResults extends SearchResultsWidget {
   const ArtistSearchResults({
     Key key,
-    this.title,
     @required this.artists,
   }) : super(key: key);
 
-  final String title;
   final Page<Artist> artists;
 
   @override
@@ -115,6 +111,37 @@ class ArtistSearchResults extends SearchResultsWidget {
           Navigator.pushNamed(
             context,
             Routes.songsByArtistId(artist.id, pageTitle: artist.name),
+          );
+        },
+      );
+    }).toList();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: items,
+    );
+  }
+}
+
+class SeriesSearchResults extends SearchResultsWidget {
+  const SeriesSearchResults({
+    Key key,
+    @required this.series,
+    @required this.seriesCategoryId = "050100", // TODO: Stop hardcoding this
+  }) : super(key: key);
+
+  final String seriesCategoryId;
+  final Page<Series> series;
+
+  @override
+  Widget build(BuildContext context) {
+    final items = series.items.map((series) {
+      return SeriesSearchResult(
+        series: series,
+        onTap: (series) {
+          Navigator.pushNamed(
+            context,
+            Routes.songsForSeries(series.title, categoryId: seriesCategoryId),
           );
         },
       );

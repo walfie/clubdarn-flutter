@@ -45,9 +45,8 @@ class _ClubDarnState extends State<ClubDarn> {
         });
 
       default:
-        // TODO
-        return searcher.getArtistsByName(value.query).then((results) {
-          return ArtistSearchResults(artists: results);
+        return searcher.getSeriesByTitle(value.query).then((series) {
+          return SeriesSearchResults(series: series);
         });
     }
   }

@@ -58,6 +58,22 @@ class Searcher {
     );
   }
 
+  Future<Page<Series>> getSeriesByTitle(String title) async {
+    // TODO
+    await Future.delayed(const Duration(milliseconds: 250));
+    return Page(
+      artistCategoryId: "010000",
+      seriesCategoryId: "050100",
+      items: [
+        Series(title: "アイカツ!"),
+        Series(title: "アイカツスターズ!"),
+        Series(title: "アイカツフレンズ!"),
+        Series(title: "劇場版 アイカツ!"),
+        Series(title: "劇場版アイカツスターズ!"),
+      ],
+    );
+  }
+
   Future<Page<CategoryGroup>> getCategories() async {
     await Future.delayed(const Duration(milliseconds: 250));
 
@@ -89,6 +105,17 @@ class Searcher {
     return Page(
       artistCategoryId: "010000",
       seriesCategoryId: null,
+      items: List.filled(_rng.nextInt(8) + 1, _song),
+    );
+  }
+
+  Future<Page<Song>> getSongsForSeries(String seriesTitle,
+      {String categoryId = "050100"}) async {
+    await Future.delayed(const Duration(milliseconds: 250));
+
+    return Page(
+      artistCategoryId: "010000",
+      seriesCategoryId: "050100",
       items: List.filled(_rng.nextInt(8) + 1, _song),
     );
   }
