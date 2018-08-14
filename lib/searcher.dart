@@ -82,4 +82,14 @@ class Searcher {
       items: List.filled(_rng.nextInt(8) + 1, _categoryGroup),
     );
   }
+
+  Future<Page<Song>> getSongsForCategoryId() async {
+    await Future.delayed(const Duration(milliseconds: 250));
+
+    return Page(
+      artistCategoryId: "010000",
+      seriesCategoryId: null,
+      items: List.filled(_rng.nextInt(8) + 1, _song),
+    );
+  }
 }

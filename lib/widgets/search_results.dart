@@ -54,10 +54,7 @@ class SongSearchResults extends SearchResultsWidget {
   @override
   Widget build(BuildContext context) {
     final items = songs.items.map((song) {
-      return Padding(
-        padding: EdgeInsets.only(bottom: 10.0),
-        child: SongSearchResult(song: song),
-      );
+      return SongSearchResult(song: song);
     }).toList();
 
     return Column(
@@ -80,17 +77,14 @@ class ArtistSearchResults extends SearchResultsWidget {
   @override
   Widget build(BuildContext context) {
     final items = artists.items.map((artist) {
-      return Padding(
-        padding: EdgeInsets.only(bottom: 10.0),
-        child: ArtistSearchResult(
-          artist: artist,
-          onTap: (artist) {
-            Navigator.pushNamed(
-              context,
-              Routes.songsByArtistId(artist.id, pageTitle: artist.name),
-            );
-          },
-        ),
+      return ArtistSearchResult(
+        artist: artist,
+        onTap: (artist) {
+          Navigator.pushNamed(
+            context,
+            Routes.songsByArtistId(artist.id, pageTitle: artist.name),
+          );
+        },
       );
     }).toList();
 
@@ -115,14 +109,11 @@ class CategorySearchResults extends SearchResultsWidget {
   Widget build(BuildContext context) {
     final items = categoryGroups.items.map((categoryGroup) {
       final categories = categoryGroup.categories.map((category) {
-        return Padding(
-          padding: EdgeInsets.only(bottom: 10.0),
-          child: CategorySearchResult(
-            category: category,
-            onTap: (category) {
-              // TODO
-            },
-          ),
+        return CategorySearchResult(
+          category: category,
+          onTap: (category) {
+            // TODO
+          },
         );
       }).toList();
 

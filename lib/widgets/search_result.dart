@@ -28,7 +28,7 @@ class SearchResult extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(14.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
@@ -52,13 +52,18 @@ class SearchResult extends StatelessWidget {
       ),
     );
 
+    final cardWithPadding = Padding(
+      padding: const EdgeInsets.only(bottom: 10.0),
+      child: card,
+    );
+
     if (badge == null) {
-      return card;
+      return cardWithPadding;
     } else {
       return Stack(
         overflow: Overflow.visible,
         children: [
-          card,
+          cardWithPadding,
           Positioned(
             right: -6.0,
             top: -6.0,
