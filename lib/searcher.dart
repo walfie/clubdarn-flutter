@@ -1,7 +1,7 @@
-import 'dart:async';
-import 'dart:math'; // TODO: Remove when Random is not needed
+import "dart:async";
+import "dart:math"; // TODO: Remove when Random is not needed
 
-import 'package:flutter/foundation.dart';
+import "package:flutter/foundation.dart" hide Category;
 
 import "models.dart";
 
@@ -55,6 +55,31 @@ class Searcher {
       artistCategoryId: "010000",
       seriesCategoryId: "050100",
       items: List.filled(_rng.nextInt(8) + 1, _song),
+    );
+  }
+
+  Future<Page<CategoryGroup>> getCategories() async {
+    await Future.delayed(const Duration(milliseconds: 250));
+
+    final CategoryGroup _categoryGroup = CategoryGroup(
+      description: CategoryDescription(
+        en: "New Songs",
+        ja: "新曲",
+      ),
+      categories: [
+        Category(
+          id: "030100",
+          description: CategoryDescription(
+            en: "All",
+            ja: "全曲",
+          ),
+        ),
+      ],
+    );
+
+    return Page(
+      artistCategoryId: "010000",
+      items: List.filled(_rng.nextInt(8) + 1, _categoryGroup),
     );
   }
 }

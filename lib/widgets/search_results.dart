@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import "package:flutter/material.dart";
+import "package:flutter/material.dart" hide Category;
 
 import "search_result.dart";
 import "../routes.dart";
@@ -91,6 +91,53 @@ class ArtistSearchResults extends SearchResultsWidget {
             );
           },
         ),
+      );
+    }).toList();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: items,
+    );
+  }
+}
+
+class CategorySearchResults extends SearchResultsWidget {
+  const CategorySearchResults({
+    Key key,
+    this.title,
+    @required this.categoryGroups,
+  }) : super(key: key);
+
+  final String title;
+  final Page<CategoryGroup> categoryGroups;
+
+  @override
+  Widget build(BuildContext context) {
+    final items = categoryGroups.items.map((categoryGroup) {
+      final categories = categoryGroup.categories.map((category) {
+        return Padding(
+          padding: EdgeInsets.only(bottom: 10.0),
+          child: CategorySearchResult(
+            category: category,
+            onTap: (category) {
+              // TODO
+            },
+          ),
+        );
+      }).toList();
+
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            categoryGroup.description.en,
+            style: const TextStyle(fontSize: 20.0),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 10.0),
+            child: Column(children: categories),
+          ),
+        ],
       );
     }).toList();
 

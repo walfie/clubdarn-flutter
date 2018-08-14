@@ -1,4 +1,4 @@
-import "package:flutter/material.dart";
+import "package:flutter/material.dart" hide Category;
 
 import "../models.dart";
 import "../routes.dart";
@@ -179,6 +179,28 @@ class ArtistSearchResult extends StatelessWidget {
       title: artist.name,
       onTap: () {
         return onTap(artist);
+      },
+    );
+  }
+}
+
+class CategorySearchResult extends StatelessWidget {
+  const CategorySearchResult({
+    Key key,
+    @required this.category,
+    this.onTap,
+  }) : super(key: key);
+
+  final Category category;
+  final Function(Category) onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return SearchResult(
+      title: category.description.en,
+      subtitle: category.description.ja,
+      onTap: () {
+        return onTap(category);
       },
     );
   }

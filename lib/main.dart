@@ -64,13 +64,21 @@ class _ClubDarnState extends State<ClubDarn> {
           },
         ),
         Divider(),
-        FutureSearchResults(future: _searchResultsView),
+        FutureSearchResults(
+          future: _searchResultsView,
+        ),
       ],
+    );
+
+    final categoriesTab = FutureSearchResults(
+      future: searcher.getCategories().then((categoryGroups) {
+        return CategorySearchResults(categoryGroups: categoryGroups);
+      }),
     );
 
     final tabs = [
       searchTab,
-      Text("Rankings"),
+      categoriesTab,
       Text("Settings"),
     ].map((widget) {
       return SingleChildScrollView(

@@ -1,4 +1,4 @@
-import "package:flutter/foundation.dart";
+import "package:flutter/foundation.dart" hide Category;
 
 enum SearchType { song, artist, series }
 
@@ -49,4 +49,34 @@ class Song {
   final String lyrics;
   final String series;
   final bool hasVideo;
+}
+
+class CategoryDescription {
+  const CategoryDescription({
+    @required this.en,
+    @required this.ja,
+  });
+
+  final String en;
+  final String ja;
+}
+
+class Category {
+  const Category({
+    @required this.id,
+    @required this.description,
+  });
+
+  final String id;
+  final CategoryDescription description;
+}
+
+class CategoryGroup {
+  const CategoryGroup({
+    @required this.description,
+    @required this.categories,
+  });
+
+  final CategoryDescription description;
+  final List<Category> categories;
 }
