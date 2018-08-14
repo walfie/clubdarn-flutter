@@ -47,10 +47,12 @@ class SongSearchResults extends SearchResultsWidget {
   const SongSearchResults({
     Key key,
     this.groupByDate = false,
+    this.showSeriesTitle = false,
     @required this.songs,
   }) : super(key: key);
 
   final bool groupByDate;
+  final bool showSeriesTitle;
   final Page<Song> songs;
 
   @override
@@ -65,8 +67,9 @@ class SongSearchResults extends SearchResultsWidget {
 
       verticalDirection = VerticalDirection.up;
       items = sortedItemsByDate.entries.map((entry) {
-        final songs =
-            entry.value.map((song) => SongSearchResult(song: song)).toList();
+        final songs = entry.value.map((song) {
+          return SongSearchResult(song: song, showSeriesTitle: showSeriesTitle);
+        }).toList();
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -83,7 +86,9 @@ class SongSearchResults extends SearchResultsWidget {
         );
       }).toList();
     } else {
-      items = songs.items.map((song) => SongSearchResult(song: song)).toList();
+      items = songs.items.map((song) {
+        return SongSearchResult(song: song, showSeriesTitle: showSeriesTitle);
+      }).toList();
     }
 
     return Column(

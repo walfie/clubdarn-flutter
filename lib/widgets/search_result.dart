@@ -83,9 +83,11 @@ class SongSearchResult extends StatelessWidget {
   const SongSearchResult({
     Key key,
     @required this.song,
+    this.showSeriesTitle = false,
   }) : super(key: key);
 
   final Song song;
+  final bool showSeriesTitle;
 
   Widget _row(Icon icon, Widget content) {
     if (content == null) {
@@ -140,7 +142,9 @@ class SongSearchResult extends StatelessWidget {
     return SearchResult(
       id: idString,
       title: song.title,
-      subtitle: song.artist.name,
+      subtitle: showSeriesTitle && song.series != null
+          ? song.series
+          : song.artist.name,
       badge: song.hasVideo ? "\u{1F3AC}" : null,
       onTap: () {
         showDialog(
