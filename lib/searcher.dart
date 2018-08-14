@@ -53,7 +53,7 @@ class Searcher {
     await Future.delayed(const Duration(milliseconds: 250));
     return Page(
       artistCategoryId: "010000",
-      seriesCategoryId: "050100",
+      seriesCategoryId: null,
       items: List.filled(_rng.nextInt(8) + 1, _song),
     );
   }

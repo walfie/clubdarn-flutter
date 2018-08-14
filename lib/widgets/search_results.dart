@@ -59,6 +59,7 @@ class SongSearchResults extends SearchResultsWidget {
   Widget build(BuildContext context) {
     List<Widget> items;
     VerticalDirection verticalDirection = VerticalDirection.down;
+    final seriesCategoryId = songs.seriesCategoryId;
 
     if (groupByDate) {
       final itemsByDate = groupBy(songs.items, (item) => item.dateAdded);
@@ -68,7 +69,10 @@ class SongSearchResults extends SearchResultsWidget {
       verticalDirection = VerticalDirection.up;
       items = sortedItemsByDate.entries.map((entry) {
         final songs = entry.value.map((song) {
-          return SongSearchResult(song: song, showSeriesTitle: showSeriesTitle);
+          return SongSearchResult(
+              song: song,
+              showSeriesTitle: showSeriesTitle,
+              seriesCategoryId: seriesCategoryId);
         }).toList();
 
         return Column(
@@ -87,7 +91,11 @@ class SongSearchResults extends SearchResultsWidget {
       }).toList();
     } else {
       items = songs.items.map((song) {
-        return SongSearchResult(song: song, showSeriesTitle: showSeriesTitle);
+        return SongSearchResult(
+          song: song,
+          showSeriesTitle: showSeriesTitle,
+          seriesCategoryId: seriesCategoryId,
+        );
       }).toList();
     }
 

@@ -83,10 +83,12 @@ class SongSearchResult extends StatelessWidget {
   const SongSearchResult({
     Key key,
     @required this.song,
+    this.seriesCategoryId,
     this.showSeriesTitle = false,
   }) : super(key: key);
 
   final Song song;
+  final String seriesCategoryId;
   final bool showSeriesTitle;
 
   Widget _row(Icon icon, Widget content) {
@@ -108,31 +110,48 @@ class SongSearchResult extends StatelessWidget {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    // TODO: Add helper
-    final idString = song.id.toString().replaceRange(4, 4, "-");
-
-    final artistName = GestureDetector(
+  Widget _clickableText({BuildContext context, String text, String route}) {
+    return GestureDetector(
       child: Text(
-        song.artist.name,
+        text,
         style: TextStyle(
           color: Theme.of(context).primaryColorDark,
           fontWeight: FontWeight.bold,
         ),
       ),
       onTap: () {
-        Navigator.pushNamed(
-          context,
-          Routes.songsByArtistId(song.artist.id, pageTitle: song.artist.name),
-        );
+        Navigator.pushNamed(context, route);
       },
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: Add helper
+    final idString = song.id.toString().replaceRange(4, 4, "-");
+
+    final artistName = _clickableText(
+      context: context,
+      text: song.artist.name,
+      route:
+          Routes.songsByArtistId(song.artist.id, pageTitle: song.artist.name),
+    );
+
+    final seriesTitle = seriesCategoryId != null
+        ? _clickableText(
+            context: context,
+            text: song.series,
+            route: Routes.songsForSeries(
+              song.series,
+              categoryId: seriesCategoryId,
+            ),
+          )
+        : Text(song.series);
 
     final rows = [
       _row(Icon(Icons.music_note), Text(song.title)),
       _row(Icon(Icons.person), artistName),
-      _row(Icon(Icons.local_movies), Text(song.series)),
+      _row(Icon(Icons.local_movies), seriesTitle),
       _row(Icon(Icons.date_range), Text(song.dateAdded)),
       _row(Icon(Icons.sms), Text(song.lyrics)),
       _row(Icon(Icons.movie),
