@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:collection';
 
+import "package:collection/collection.dart";
 import "package:flutter/material.dart" hide Category;
 
 import "search_result.dart";
@@ -45,20 +47,50 @@ class SongSearchResults extends SearchResultsWidget {
   const SongSearchResults({
     Key key,
     this.title,
+    this.groupByDate = false,
     @required this.songs,
   }) : super(key: key);
 
   final String title;
+  final bool groupByDate;
   final Page<Song> songs;
 
   @override
   Widget build(BuildContext context) {
-    final items = songs.items.map((song) {
-      return SongSearchResult(song: song);
-    }).toList();
+    List<Widget> items;
+    VerticalDirection verticalDirection = VerticalDirection.down;
+
+    if (groupByDate) {
+      final itemsByDate = groupBy(songs.items, (item) => item.dateAdded);
+      final Map<String, List<Song>> sortedItemsByDate =
+          SplayTreeMap.from(itemsByDate);
+
+      verticalDirection = VerticalDirection.up;
+      items = sortedItemsByDate.entries.map((entry) {
+        final songs =
+            entry.value.map((song) => SongSearchResult(song: song)).toList();
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              entry.key,
+              style: const TextStyle(fontSize: 20.0),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 10.0),
+              child: Column(children: songs),
+            ),
+          ],
+        );
+      }).toList();
+    } else {
+      items = songs.items.map((song) => SongSearchResult(song: song)).toList();
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
+      verticalDirection: verticalDirection,
       children: items,
     );
   }
@@ -112,7 +144,11 @@ class CategorySearchResults extends SearchResultsWidget {
         return CategorySearchResult(
           category: category,
           onTap: (category) {
-            // TODO
+            Navigator.pushNamed(
+              context,
+              Routes.songsForCategoryId(category.id,
+                  pageTitle: category.description.en),
+            );
           },
         );
       }).toList();

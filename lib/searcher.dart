@@ -83,7 +83,7 @@ class Searcher {
     );
   }
 
-  Future<Page<Song>> getSongsForCategoryId() async {
+  Future<Page<Song>> getSongsForCategoryId(String categoryId) async {
     await Future.delayed(const Duration(milliseconds: 250));
 
     return Page(
