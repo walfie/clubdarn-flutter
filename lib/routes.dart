@@ -1,7 +1,7 @@
-import 'dart:async';
+import "dart:async";
 
-import 'package:flutter/foundation.dart';
-import 'package:fluro/fluro.dart';
+import "package:flutter/foundation.dart";
+import "package:fluro/fluro.dart";
 
 import "models.dart";
 import "searcher.dart";

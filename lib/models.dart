@@ -2,6 +2,8 @@ import "package:flutter/foundation.dart" hide Category;
 
 enum SearchType { song, artist, series }
 
+typedef T Deserializer<T>(Map<String, dynamic> object);
+
 class SearchValues {
   String query = "";
   SearchType searchType = SearchType.song;
@@ -14,6 +16,15 @@ class Page<T> {
     @required this.items,
   });
 
+  Page.fromJson(
+    Map<String, dynamic> json,
+    Deserializer<T> deserializer,
+  )   : artistCategoryId = json["artistCategoryId"],
+        seriesCategoryId = json["seriesCategoryId"],
+        items = List<Map<String, dynamic>>.from(json["items"])
+            .map(deserializer)
+            .toList();
+
   final String artistCategoryId;
   final String seriesCategoryId;
   final List<T> items;
@@ -24,6 +35,10 @@ class Artist {
     @required this.id,
     @required this.name,
   });
+
+  Artist.fromJson(Map<String, dynamic> json)
+      : id = json["id"],
+        name = json["name"];
 
   final int id;
   final String name;
@@ -38,8 +53,18 @@ class Song {
     this.endDate,
     this.lyrics,
     this.series,
-    this.hasVideo,
+    this.hasVideo = false,
   });
+
+  Song.fromJson(Map<String, dynamic> json)
+      : id = json["id"],
+        title = json["title"],
+        artist = Artist.fromJson(json["artist"]),
+        dateAdded = json["dateAdded"],
+        endDate = json["endDate"],
+        lyrics = json["lyrics"],
+        series = json["series"],
+        hasVideo = json["hasVideo"] == true;
 
   final int id;
   final String title;
@@ -53,6 +78,9 @@ class Song {
 
 class Series {
   const Series({@required this.title});
+
+  Series.fromJson(Map<String, dynamic> json) : title = json["title"];
+
   final String title;
 }
 
@@ -61,6 +89,10 @@ class CategoryDescription {
     @required this.en,
     @required this.ja,
   });
+
+  CategoryDescription.fromJson(Map<String, dynamic> json)
+      : en = json["en"],
+        ja = json["ja"];
 
   final String en;
   final String ja;
@@ -72,6 +104,10 @@ class Category {
     @required this.description,
   });
 
+  Category.fromJson(Map<String, dynamic> json)
+      : id = json["id"],
+        description = CategoryDescription.fromJson(json["description"]);
+
   final String id;
   final CategoryDescription description;
 }
@@ -81,6 +117,11 @@ class CategoryGroup {
     @required this.description,
     @required this.categories,
   });
+
+  CategoryGroup.fromJson(Map<String, dynamic> json)
+      : description = CategoryDescription.fromJson(json["description"]),
+        categories =
+            json["categories"].map((obj) => Category.fromJson(obj)).toList();
 
   final CategoryDescription description;
   final List<Category> categories;

@@ -1,7 +1,9 @@
 import "dart:async";
+import "dart:convert";
 import "dart:math"; // TODO: Remove when Random is not needed
 
 import "package:flutter/foundation.dart" hide Category;
+import 'package:http/http.dart' as http;
 
 import "models.dart";
 
@@ -22,7 +24,7 @@ final Song _song = Song(
 
 class Searcher {
   Searcher({
-    @required this.baseUrl = "https://clubdarn.aikats.us",
+    @required this.baseUrl = "https://clubdarn.aikats.us/api",
     this.serialNo,
   });
 
@@ -31,11 +33,31 @@ class Searcher {
 
   Random _rng = Random(); // TODO: Temporary solution
 
+  Future<Page<T>> _getPage<T>(
+    String url,
+    Map<String, String> queryParameters,
+    Deserializer<T> deserializer,
+  ) async {
+    // serial_no can be null, in which case we remove it
+    queryParameters.removeWhere((k, v) => v == null);
+
+    final uri = Uri.tryParse(url).replace(queryParameters: queryParameters);
+
+    final response = await http.get(uri);
+    if (response.statusCode >= 300) {
+      throw Exception("${response.statusCode} error: ${response.body}");
+    }
+
+    final jsonBody = json.decode(utf8.decode(response.bodyBytes));
+
+    return Page.fromJson(jsonBody, deserializer);
+  }
+
   Future<Page<Song>> getSongsByTitle(String title) async {
-    await Future.delayed(const Duration(milliseconds: 250));
-    return Page(
-      artistCategoryId: "010000",
-      items: List.filled(_rng.nextInt(8), _song),
+    return await _getPage<Song>(
+      "$baseUrl/songs/",
+      {"title": title, "serial_no": serialNo},
+      (j) => Song.fromJson(j),
     );
   }
 

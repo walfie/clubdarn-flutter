@@ -125,6 +125,8 @@ class SongSearchResult extends StatelessWidget {
     );
   }
 
+  Text _textOrNull(String text) => text != null ? Text(text) : null;
+
   @override
   Widget build(BuildContext context) {
     // TODO: Add helper
@@ -146,14 +148,14 @@ class SongSearchResult extends StatelessWidget {
               categoryId: seriesCategoryId,
             ),
           )
-        : Text(song.series);
+        : _textOrNull(song.series);
 
     final rows = [
-      _row(Icon(Icons.music_note), Text(song.title)),
+      _row(Icon(Icons.music_note), _textOrNull(song.title)),
       _row(Icon(Icons.person), artistName),
       _row(Icon(Icons.local_movies), seriesTitle),
-      _row(Icon(Icons.date_range), Text(song.dateAdded)),
-      _row(Icon(Icons.sms), Text(song.lyrics)),
+      _row(Icon(Icons.date_range), _textOrNull(song.dateAdded)),
+      _row(Icon(Icons.sms), _textOrNull(song.lyrics)),
       _row(Icon(Icons.movie),
           song.hasVideo == true ? Text("Has music video") : null),
     ].where(_notNull).toList();
@@ -164,7 +166,7 @@ class SongSearchResult extends StatelessWidget {
       subtitle: showSeriesTitle && song.series != null
           ? song.series
           : song.artist.name,
-      badge: song.hasVideo ? "\u{1F3AC}" : null,
+      badge: song.hasVideo == true ? "\u{1F3AC}" : null,
       onTap: () {
         showDialog(
           context: context,

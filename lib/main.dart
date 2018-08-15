@@ -34,6 +34,10 @@ class _ClubDarnState extends State<ClubDarn> {
   Future<SearchResultsWidget> _searchResultsView = null;
 
   Future<SearchResultsWidget> _executeSearch(SearchValues value) {
+    if (value.query.isEmpty) {
+      return null;
+    }
+
     switch (value.searchType) {
       case SearchType.song:
         return searcher.getSongsByTitle(value.query).then((songs) {
