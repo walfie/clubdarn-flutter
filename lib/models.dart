@@ -120,8 +120,9 @@ class CategoryGroup {
 
   CategoryGroup.fromJson(Map<String, dynamic> json)
       : description = CategoryDescription.fromJson(json["description"]),
-        categories =
-            json["categories"].map((obj) => Category.fromJson(obj)).toList();
+        categories = List<Map<String, dynamic>>.from(json["categories"])
+            .map((obj) => Category.fromJson(obj))
+            .toList();
 
   final CategoryDescription description;
   final List<Category> categories;

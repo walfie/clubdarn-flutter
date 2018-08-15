@@ -80,6 +80,7 @@ class SearchResult extends StatelessWidget {
 }
 
 class SongSearchResult extends StatelessWidget {
+  // TODO: Hide arist name on artist song page
   const SongSearchResult({
     Key key,
     @required this.song,
