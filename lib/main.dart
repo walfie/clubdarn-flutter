@@ -76,10 +76,20 @@ class _ClubDarnState extends State<ClubDarn> {
       }),
     );
 
+    final settingsTab = SettingsTab(
+      searcher: searcher,
+      onChanged: (value) {
+        // TODO: Retry search
+        setState(() {
+          _searchResultsView = null;
+        });
+      },
+    );
+
     final tabs = [
       searchTab,
       categoriesTab,
-      SettingsTab(searcher: searcher),
+      settingsTab,
     ].map((widget) {
       return SingleChildScrollView(
         child: Padding(padding: EdgeInsets.all(16.0), child: widget),

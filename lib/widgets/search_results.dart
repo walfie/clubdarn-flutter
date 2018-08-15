@@ -12,6 +12,8 @@ abstract class SearchResultsWidget extends StatelessWidget {
   const SearchResultsWidget({
     Key key,
   }) : super(key: key);
+
+  bool isEmpty();
 }
 
 class FutureSearchResults extends SearchResultsWidget {
@@ -22,6 +24,8 @@ class FutureSearchResults extends SearchResultsWidget {
 
   final Future<SearchResultsWidget> future;
 
+  bool isEmpty() => null;
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -29,14 +33,29 @@ class FutureSearchResults extends SearchResultsWidget {
       builder: (context, snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.none:
-            return Text("");
+            return Container();
           case ConnectionState.waiting:
             return Center(child: CircularProgressIndicator());
           default:
-            if (snapshot.hasError)
+            if (snapshot.hasError) {
               return new Text('Error: ${snapshot.error}');
-            else
+            } else if (snapshot.data.isEmpty()) {
+              return Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 15.0),
+                    child: const Icon(
+                      Icons.sentiment_dissatisfied,
+                      color: Colors.grey,
+                      size: 40.0,
+                    ),
+                  ),
+                  Text("No results"),
+                ],
+              );
+            } else {
               return snapshot.data;
+            }
         }
       },
     );
@@ -54,6 +73,8 @@ class SongSearchResults extends SearchResultsWidget {
   final bool groupByDate;
   final bool showSeriesTitle;
   final Page<Song> songs;
+
+  bool isEmpty() => songs.items.isEmpty;
 
   @override
   Widget build(BuildContext context) {
@@ -115,6 +136,8 @@ class ArtistSearchResults extends SearchResultsWidget {
 
   final Page<Artist> artists;
 
+  bool isEmpty() => artists.items.isEmpty;
+
   @override
   Widget build(BuildContext context) {
     final items = artists.items.map((artist) {
@@ -146,6 +169,8 @@ class SeriesSearchResults extends SearchResultsWidget {
   final String seriesCategoryId;
   final Page<Series> series;
 
+  bool isEmpty() => series.items.isEmpty;
+
   @override
   Widget build(BuildContext context) {
     final items = series.items.map((series) {
@@ -176,6 +201,8 @@ class CategorySearchResults extends SearchResultsWidget {
 
   final String title;
   final Page<CategoryGroup> categoryGroups;
+
+  bool isEmpty() => categoryGroups.items.isEmpty;
 
   @override
   Widget build(BuildContext context) {

@@ -35,7 +35,7 @@ class Searcher {
     await Future.delayed(const Duration(milliseconds: 250));
     return Page(
       artistCategoryId: "010000",
-      items: List.filled(_rng.nextInt(8) + 1, _song),
+      items: List.filled(_rng.nextInt(8), _song),
     );
   }
 
@@ -44,7 +44,7 @@ class Searcher {
 
     return Page(
       artistCategoryId: "010000",
-      items: List.filled(_rng.nextInt(8) + 1, _artist),
+      items: List.filled(_rng.nextInt(8), _artist),
     );
   }
 
@@ -54,7 +54,7 @@ class Searcher {
     return Page(
       artistCategoryId: "010000",
       seriesCategoryId: null,
-      items: List.filled(_rng.nextInt(8) + 1, _song),
+      items: List.filled(_rng.nextInt(8), _song),
     );
   }
 
@@ -95,7 +95,7 @@ class Searcher {
 
     return Page(
       artistCategoryId: "010000",
-      items: List.filled(_rng.nextInt(8) + 1, _categoryGroup),
+      items: List.filled(_rng.nextInt(8), _categoryGroup),
     );
   }
 
@@ -105,7 +105,7 @@ class Searcher {
     return Page(
       artistCategoryId: "010000",
       seriesCategoryId: null,
-      items: List.filled(_rng.nextInt(8) + 1, _song),
+      items: List.filled(_rng.nextInt(8), _song),
     );
   }
 
@@ -116,7 +116,7 @@ class Searcher {
     return Page(
       artistCategoryId: "010000",
       seriesCategoryId: "050100",
-      items: List.filled(_rng.nextInt(8) + 1, _song),
+      items: List.filled(_rng.nextInt(8), _song),
     );
   }
 }

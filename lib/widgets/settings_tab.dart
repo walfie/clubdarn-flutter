@@ -6,9 +6,11 @@ import "../searcher.dart";
 class SettingsTab extends StatefulWidget {
   SettingsTab({
     @required this.searcher,
+    this.onChanged,
   });
 
   final Searcher searcher;
+  final ValueChanged<String> onChanged;
 
   @override
   _SettingsTabState createState() => _SettingsTabState();
@@ -21,9 +23,12 @@ class _SettingsTabState extends State<SettingsTab> {
       value: value,
       groupValue: widget.searcher.serialNo,
       onChanged: (String value) {
-        setState(() {
-          widget.searcher.serialNo = value;
-        });
+        if (value != widget.searcher.serialNo) {
+          setState(() {
+            widget.searcher.serialNo = value;
+            widget.onChanged?.call(value);
+          });
+        }
       },
     );
   }
