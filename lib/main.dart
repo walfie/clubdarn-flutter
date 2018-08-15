@@ -9,6 +9,7 @@ import "routes.dart";
 import "widgets/search_bar.dart";
 import "widgets/search_result.dart";
 import "widgets/search_results.dart";
+import "widgets/settings_tab.dart";
 
 class ClubDarn extends StatefulWidget {
   ClubDarn({
@@ -78,7 +79,7 @@ class _ClubDarnState extends State<ClubDarn> {
     final tabs = [
       searchTab,
       categoriesTab,
-      Text("Settings"),
+      SettingsTab(searcher: searcher),
     ].map((widget) {
       return SingleChildScrollView(
         child: Padding(padding: EdgeInsets.all(16.0), child: widget),
