@@ -28,7 +28,7 @@ class Routes {
       final title = params["pageTitle"]?.first;
 
       final future = searcher.getSongsByArtistId(artistId).then((songs) {
-        return SongSearchResults(songs: songs);
+        return SongSearchResults(songs: songs, hideArtistName: true);
       });
 
       return Subpage(title: title, child: FutureSearchResults(future: future));
@@ -62,7 +62,9 @@ class Routes {
           .then((songs) => SongSearchResults(songs: songs));
 
       return Subpage(
-          title: seriesTitle, child: FutureSearchResults(future: future));
+        title: seriesTitle,
+        child: FutureSearchResults(future: future),
+      );
     });
 
     router.define("/categories/:categoryId/series/:seriesTitle",

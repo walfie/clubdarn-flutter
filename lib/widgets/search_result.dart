@@ -80,17 +80,18 @@ class SearchResult extends StatelessWidget {
 }
 
 class SongSearchResult extends StatelessWidget {
-  // TODO: Hide arist name on artist song page
   const SongSearchResult({
     Key key,
     @required this.song,
     this.seriesCategoryId,
     this.showSeriesTitle = false,
+    this.hideArtistName = false,
   }) : super(key: key);
 
   final Song song;
   final String seriesCategoryId;
   final bool showSeriesTitle;
+  final bool hideArtistName;
 
   Widget _row(Icon icon, Widget content) {
     if (content == null) {
@@ -161,12 +162,17 @@ class SongSearchResult extends StatelessWidget {
           song.hasVideo == true ? Text("Has music video") : null),
     ].where(_notNull).toList();
 
+    String subtitle = null;
+    if (showSeriesTitle && song.series != null) {
+      subtitle = song.series;
+    } else if (!hideArtistName) {
+      subtitle = song.artist.name;
+    }
+
     return SearchResult(
       id: idString,
       title: song.title,
-      subtitle: showSeriesTitle && song.series != null
-          ? song.series
-          : song.artist.name,
+      subtitle: subtitle,
       badge: song.hasVideo == true ? "\u{1F3AC}" : null,
       onTap: () {
         showDialog(

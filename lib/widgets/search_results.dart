@@ -67,11 +67,13 @@ class SongSearchResults extends SearchResultsWidget {
     Key key,
     this.groupByDate = false,
     this.showSeriesTitle = false,
+    this.hideArtistName = false,
     @required this.songs,
   }) : super(key: key);
 
   final bool groupByDate;
   final bool showSeriesTitle;
+  final bool hideArtistName;
   final Page<Song> songs;
 
   bool isEmpty() => songs.items.isEmpty;
@@ -91,9 +93,11 @@ class SongSearchResults extends SearchResultsWidget {
       items = sortedItemsByDate.entries.map((entry) {
         final songs = entry.value.map((song) {
           return SongSearchResult(
-              song: song,
-              showSeriesTitle: showSeriesTitle,
-              seriesCategoryId: seriesCategoryId);
+            song: song,
+            showSeriesTitle: showSeriesTitle,
+            seriesCategoryId: seriesCategoryId,
+            hideArtistName: hideArtistName,
+          );
         }).toList();
 
         return Column(
@@ -116,6 +120,7 @@ class SongSearchResults extends SearchResultsWidget {
           song: song,
           showSeriesTitle: showSeriesTitle,
           seriesCategoryId: seriesCategoryId,
+          hideArtistName: hideArtistName,
         );
       }).toList();
     }
@@ -207,6 +212,9 @@ class CategorySearchResults extends SearchResultsWidget {
   @override
   Widget build(BuildContext context) {
     final items = categoryGroups.items.map((categoryGroup) {
+      categoryGroup.categories
+          .sort((c1, c2) => c1.description.en.compareTo(c2.description.en));
+
       final categories = categoryGroup.categories.map((category) {
         return CategorySearchResult(
           category: category,
@@ -225,7 +233,7 @@ class CategorySearchResults extends SearchResultsWidget {
         children: [
           Text(
             categoryGroup.description.en,
-            style: const TextStyle(fontSize: 20.0),
+            style: const TextStyle(fontSize: 25.0),
           ),
           Padding(
             padding: EdgeInsets.symmetric(vertical: 10.0),
