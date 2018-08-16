@@ -95,8 +95,10 @@ class _ClubDarnState extends State<ClubDarn> {
       categoriesTab,
       settingsTab,
     ].map((widget) {
-      return SingleChildScrollView(
-        child: Padding(padding: EdgeInsets.all(16.0), child: widget),
+      return Scrollbar(
+        child: SingleChildScrollView(
+          child: Padding(padding: EdgeInsets.all(16.0), child: widget),
+        ),
       );
     }).toList(growable: false);
 

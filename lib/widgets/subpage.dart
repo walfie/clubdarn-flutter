@@ -16,8 +16,10 @@ class Subpage extends StatelessWidget {
       appBar: AppBar(
         title: title == null ? Container() : Text(title, maxLines: 2),
       ),
-      body: SingleChildScrollView(
-        child: Padding(padding: EdgeInsets.all(16.0), child: child),
+      body: Scrollbar(
+        child: SingleChildScrollView(
+          child: Padding(padding: EdgeInsets.all(16.0), child: child),
+        ),
       ),
     );
   }
