@@ -66,6 +66,43 @@ class FutureSearchResults extends SearchResultsWidget {
 class SongSearchResults extends SearchResultsWidget {
   const SongSearchResults({
     Key key,
+    this.showSeriesTitle = false,
+    this.hideArtistName = false,
+    @required this.songs,
+  }) : super(key: key);
+
+  final bool showSeriesTitle;
+  final bool hideArtistName;
+  final Page<Song> songs;
+
+  bool isEmpty() => songs.items.isEmpty;
+
+  @override
+  Widget build(BuildContext context) {
+    List<Widget> items;
+    VerticalDirection verticalDirection = VerticalDirection.down;
+    final seriesCategoryId = songs.seriesCategoryId;
+
+    items = songs.items.map((song) {
+      return SongSearchResult(
+        song: song,
+        showSeriesTitle: showSeriesTitle,
+        seriesCategoryId: seriesCategoryId,
+        hideArtistName: hideArtistName,
+      );
+    }).toList();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      verticalDirection: verticalDirection,
+      children: items,
+    );
+  }
+}
+
+class FullscreenSongSearchResults extends SearchResultsWidget {
+  const FullscreenSongSearchResults({
+    Key key,
     this.groupByDate = false,
     this.showSeriesTitle = false,
     this.hideArtistName = false,
@@ -81,55 +118,43 @@ class SongSearchResults extends SearchResultsWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> items;
-    VerticalDirection verticalDirection = VerticalDirection.down;
-    final seriesCategoryId = songs.seriesCategoryId;
+    return ListView.builder(
+      padding: EdgeInsets.all(16.0),
+      itemBuilder: (context, index) {
+        if (index >= songs.items.length) {
+          return null;
+        }
 
-    if (groupByDate) {
-      final itemsByDate = groupBy(songs.items, (item) => item.dateAdded);
-      final Map<String, List<Song>> sortedItemsByDate =
-          SplayTreeMap.from(itemsByDate);
-
-      verticalDirection = VerticalDirection.up;
-      items = sortedItemsByDate.entries.map((entry) {
-        final songs = entry.value.map((song) {
-          return SongSearchResult(
-            song: song,
-            showSeriesTitle: showSeriesTitle,
-            seriesCategoryId: seriesCategoryId,
-            hideArtistName: hideArtistName,
-          );
-        }).toList();
-
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              entry.key,
-              style: const TextStyle(fontSize: 20.0),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 10.0),
-              child: Column(children: songs),
-            ),
-          ],
-        );
-      }).toList();
-    } else {
-      items = songs.items.map((song) {
-        return SongSearchResult(
+        final song = songs.items[index];
+        final songWidget = SongSearchResult(
           song: song,
           showSeriesTitle: showSeriesTitle,
-          seriesCategoryId: seriesCategoryId,
+          seriesCategoryId: songs.seriesCategoryId,
           hideArtistName: hideArtistName,
         );
-      }).toList();
-    }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      verticalDirection: verticalDirection,
-      children: items,
+        if (groupByDate) {
+          final showDate = index == 0 ||
+              (songs.items[index - 1]?.dateAdded != song.dateAdded);
+          if (showDate) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10.0),
+                  child: Text(
+                    song.dateAdded,
+                    style: const TextStyle(fontSize: 25.0),
+                  ),
+                ),
+                songWidget,
+              ],
+            );
+          }
+        }
+
+        return songWidget;
+      },
     );
   }
 }

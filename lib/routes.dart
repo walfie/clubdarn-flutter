@@ -28,7 +28,7 @@ class Routes {
       final title = params["pageTitle"]?.first;
 
       final future = searcher.getSongsByArtistId(artistId).then((songs) {
-        return SongSearchResults(songs: songs, hideArtistName: true);
+        return FullscreenSongSearchResults(songs: songs, hideArtistName: true);
       });
 
       return Subpage(title: title, child: FutureSearchResults(future: future));
@@ -41,7 +41,7 @@ class Routes {
       final title = params["pageTitle"]?.first;
 
       final future = searcher.getSongsForCategoryId(categoryId).then((songs) {
-        return SongSearchResults(
+        return FullscreenSongSearchResults(
           songs: songs,
           groupByDate: true,
           showSeriesTitle: true,
@@ -59,7 +59,7 @@ class Routes {
 
       final future = searcher
           .getSongsForSeries(seriesTitle, categoryId: categoryId)
-          .then((songs) => SongSearchResults(songs: songs));
+          .then((songs) => FullscreenSongSearchResults(songs: songs));
 
       return Subpage(
         title: seriesTitle,

@@ -85,7 +85,12 @@ class Searcher {
     final page = await _getPage<CategoryGroup>(
       "$baseUrl/categories",
       {"serial_no": serialNo},
-      (j) => CategoryGroup.fromJson(j),
+      (j) {
+        final group = CategoryGroup.fromJson(j);
+        group.categories
+            .sort((c1, c2) => c1.description.en.compareTo(c2.description.en));
+        return group;
+      },
     );
 
     // For whatever reason, this isn't returned by the API.
@@ -103,21 +108,20 @@ class Searcher {
       ],
     );
 
-    for (var group in page.items) {
-      group.categories
-          .sort((c1, c2) => c1.description.en.compareTo(c2.description.en));
-    }
-
     page.items.add(additionalGroup);
     return page;
   }
 
   Future<Page<Song>> getSongsForCategoryId(String categoryId) async {
-    return await _getPage<Song>(
+    final page = await _getPage<Song>(
       "$baseUrl/categories/$categoryId/songs",
       {"serial_no": serialNo},
       (j) => Song.fromJson(j),
     );
+
+    // Reverse sort so that more recent items show up first
+    page.items.sort((a, b) => b.dateAdded.compareTo(a.dateAdded));
+    return page;
   }
 
   Future<Page<Song>> getSongsForSeries(String seriesTitle,
