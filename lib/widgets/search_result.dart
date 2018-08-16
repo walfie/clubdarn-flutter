@@ -27,7 +27,8 @@ class SearchResult extends StatelessWidget {
       elevation: 6.0,
       child: InkWell(
         onTap: onTap,
-        child: Padding(
+        child: Container(
+          alignment: Alignment.center,
           padding: const EdgeInsets.all(14.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -54,7 +55,10 @@ class SearchResult extends StatelessWidget {
 
     final cardWithPadding = Padding(
       padding: const EdgeInsets.only(bottom: 10.0),
-      child: card,
+      child: Container(
+        constraints: const BoxConstraints(minHeight: 65.0),
+        child: card,
+      ),
     );
 
     if (badge == null) {
