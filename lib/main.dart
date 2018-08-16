@@ -2,6 +2,7 @@ import 'dart:async';
 
 import "package:flutter/material.dart";
 import 'package:fluro/fluro.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import "models.dart";
 import "searcher.dart";
@@ -12,9 +13,7 @@ import "widgets/search_results.dart";
 import "widgets/settings_tab.dart";
 
 class ClubDarn extends StatefulWidget {
-  ClubDarn({
-    @required this.searcher,
-  });
+  ClubDarn({@required this.searcher});
 
   final Searcher searcher;
 
@@ -29,7 +28,7 @@ class _ClubDarnState extends State<ClubDarn> {
   }
 
   Router _router;
-  Searcher searcher;
+  final Searcher searcher;
 
   Future<SearchResultsWidget> _searchResultsView = null;
 
@@ -130,7 +129,11 @@ class _ClubDarnState extends State<ClubDarn> {
   }
 }
 
-void main() {
+void main() async {
   Searcher searcher = Searcher();
+
+  final prefs = await SharedPreferences.getInstance();
+  searcher.serialNo = prefs.getString("serialNo");
+
   runApp(ClubDarn(searcher: searcher));
 }

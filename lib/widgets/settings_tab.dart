@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import 'package:shared_preferences/shared_preferences.dart';
 
 import "../models.dart";
 import "../searcher.dart";
@@ -24,6 +25,10 @@ class _SettingsTabState extends State<SettingsTab> {
       groupValue: widget.searcher.serialNo,
       onChanged: (String value) {
         if (value != widget.searcher.serialNo) {
+          SharedPreferences.getInstance().then((prefs) {
+            prefs.setString("serialNo", widget.searcher.serialNo);
+          });
+
           setState(() {
             widget.searcher.serialNo = value;
             widget.onChanged?.call(value);
