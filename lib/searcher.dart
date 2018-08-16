@@ -3,6 +3,7 @@ import "dart:convert";
 
 import "package:flutter/foundation.dart" hide Category;
 import 'package:http/http.dart' as http;
+import 'package:quiver/collection.dart';
 
 import "models.dart";
 
@@ -14,6 +15,7 @@ class Searcher {
 
   String baseUrl;
   String serialNo;
+  final LruMap<Uri, Page<dynamic>> _cache = LruMap(maximumSize: 50);
 
   Future<Page<T>> _getPage<T>(
     String url,
@@ -25,14 +27,25 @@ class Searcher {
 
     final uri = Uri.tryParse(url).replace(queryParameters: queryParameters);
 
-    final response = await http.get(uri);
-    if (response.statusCode >= 300) {
-      throw Exception("${response.statusCode} error: ${response.body}");
+    final cachedItem = _cache[uri];
+
+    if (cachedItem == null) {
+      debugPrint("GET ${uri.toString()}");
+      final response = await http.get(uri);
+      if (response.statusCode >= 300) {
+        throw Exception("${response.statusCode} error: ${response.body}");
+      }
+
+      final jsonBody = json.decode(utf8.decode(response.bodyBytes));
+
+      final page = Page.fromJson(jsonBody, deserializer);
+
+      _cache[uri] = page as Page<dynamic>;
+      return page;
+    } else {
+      debugPrint("Cached ${uri.toString()}");
+      return cachedItem as Page<T>;
     }
-
-    final jsonBody = json.decode(utf8.decode(response.bodyBytes));
-
-    return Page.fromJson(jsonBody, deserializer);
   }
 
   Future<Page<Song>> getSongsByTitle(String title) async {

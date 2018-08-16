@@ -41,6 +41,7 @@ class FutureSearchResults extends SearchResultsWidget {
               return new Text('Error: ${snapshot.error}');
             } else if (snapshot.data.isEmpty()) {
               return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 15.0),
@@ -50,7 +51,7 @@ class FutureSearchResults extends SearchResultsWidget {
                       size: 40.0,
                     ),
                   ),
-                  Text("No results"),
+                  Center(child: Text("No results")),
                 ],
               );
             } else {
