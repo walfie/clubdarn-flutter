@@ -212,9 +212,6 @@ class CategorySearchResults extends SearchResultsWidget {
   @override
   Widget build(BuildContext context) {
     final items = categoryGroups.items.map((categoryGroup) {
-      categoryGroup.categories
-          .sort((c1, c2) => c1.description.en.compareTo(c2.description.en));
-
       final categories = categoryGroup.categories.map((category) {
         return CategorySearchResult(
           category: category,

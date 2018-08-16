@@ -69,11 +69,34 @@ class Searcher {
 
   Future<Page<CategoryGroup>> getCategories() async {
     // TODO: Add special "Music Video" category
-    return await _getPage<CategoryGroup>(
+    final page = await _getPage<CategoryGroup>(
       "$baseUrl/categories",
       {"serial_no": serialNo},
       (j) => CategoryGroup.fromJson(j),
     );
+
+    // For whatever reason, this isn't returned by the API.
+    // I probably had a reason for that, but I don't remember why.
+    const additionalGroup = CategoryGroup(
+      description: CategoryDescription(en: "Series", ja: "アニメ･特撮"),
+      categories: [
+        Category(
+          id: "050300",
+          description: CategoryDescription(
+            en: "Music Video",
+            ja: "映像",
+          ),
+        ),
+      ],
+    );
+
+    for (var group in page.items) {
+      group.categories
+          .sort((c1, c2) => c1.description.en.compareTo(c2.description.en));
+    }
+
+    page.items.add(additionalGroup);
+    return page;
   }
 
   Future<Page<Song>> getSongsForCategoryId(String categoryId) async {
