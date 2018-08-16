@@ -3,6 +3,7 @@ import 'dart:collection';
 
 import "package:collection/collection.dart";
 import "package:flutter/material.dart" hide Category;
+import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 
 import "search_result.dart";
 import "../routes.dart";
@@ -113,13 +114,16 @@ class FullscreenSongSearchResults extends SearchResultsWidget {
   final bool showSeriesTitle;
   final bool hideArtistName;
   final Page<Song> songs;
+  final _scrollController = ScrollController();
 
   bool isEmpty() => songs.items.isEmpty;
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
+    final listView = ListView.builder(
+      controller: _scrollController,
       padding: EdgeInsets.all(16.0),
+      itemCount: songs.items.length,
       itemBuilder: (context, index) {
         if (index >= songs.items.length) {
           return null;
@@ -155,6 +159,11 @@ class FullscreenSongSearchResults extends SearchResultsWidget {
 
         return songWidget;
       },
+    );
+
+    return DraggableScrollbar.semicircle(
+      controller: _scrollController,
+      child: listView,
     );
   }
 }
