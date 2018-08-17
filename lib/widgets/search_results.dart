@@ -184,15 +184,17 @@ class ArtistSearchResults extends SearchResultsWidget {
 
   @override
   Widget build(BuildContext context) {
+    final onTap = (artist) {
+      Navigator.pushNamed(
+        context,
+        Routes.songsByArtistId(artist.id, pageTitle: artist.name),
+      );
+    };
+
     final items = artists.items.map((artist) {
       return ArtistSearchResult(
         artist: artist,
-        onTap: (artist) {
-          Navigator.pushNamed(
-            context,
-            Routes.songsByArtistId(artist.id, pageTitle: artist.name),
-          );
-        },
+        onTap: onTap,
       );
     }).toList();
 
@@ -217,15 +219,17 @@ class SeriesSearchResults extends SearchResultsWidget {
 
   @override
   Widget build(BuildContext context) {
+    final onTap = (series) {
+      Navigator.pushNamed(
+        context,
+        Routes.songsForSeries(series.title, categoryId: this.seriesCategoryId),
+      );
+    };
+
     final items = series.items.map((series) {
       return SeriesSearchResult(
         series: series,
-        onTap: (series) {
-          Navigator.pushNamed(
-            context,
-            Routes.songsForSeries(series.title, categoryId: seriesCategoryId),
-          );
-        },
+        onTap: onTap,
       );
     }).toList();
 
@@ -250,17 +254,21 @@ class CategorySearchResults extends SearchResultsWidget {
 
   @override
   Widget build(BuildContext context) {
+    final onTap = (category) {
+      Navigator.pushNamed(
+        context,
+        Routes.songsForCategoryId(
+          category.id,
+          pageTitle: category.description.en,
+        ),
+      );
+    };
+
     final items = categoryGroups.items.map((categoryGroup) {
       final categories = categoryGroup.categories.map((category) {
         return CategorySearchResult(
           category: category,
-          onTap: (category) {
-            Navigator.pushNamed(
-              context,
-              Routes.songsForCategoryId(category.id,
-                  pageTitle: category.description.en),
-            );
-          },
+          onTap: onTap,
         );
       }).toList();
 
