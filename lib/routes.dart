@@ -41,9 +41,13 @@ class Routes {
       final title = params["pageTitle"]?.first;
 
       final future = searcher.getSongsForCategoryId(categoryId).then((songs) {
+        // 03xxxx category IDs are the "New Songs" categories
+        final groupByDate = categoryId.compareTo("030000") > 0 &&
+            categoryId.compareTo("040000") < 0;
+
         return FullscreenSongSearchResults(
           songs: songs,
-          groupByDate: true,
+          groupByDate: groupByDate,
           showSeriesTitle: true,
         );
       });
