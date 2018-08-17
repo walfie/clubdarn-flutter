@@ -108,7 +108,9 @@ class Searcher {
       ],
     );
 
-    page.items.add(additionalGroup);
+    if (!page.items.contains(additionalGroup)) {
+      page.items.add(additionalGroup);
+    }
     return page;
   }
 
