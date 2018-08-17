@@ -140,14 +140,18 @@ class FullscreenSongSearchResults extends SearchResultsWidget {
         if (groupByDate) {
           final showDate = index == 0 ||
               (songs.items[index - 1]?.dateAdded != song.dateAdded);
+
           if (showDate) {
+            final date =
+                song.dateAdded == "1900/01/01" ? "Unknown" : song.dateAdded;
+
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10.0),
+                  padding: const EdgeInsets.symmetric(vertical: 10.0),
                   child: Text(
-                    song.dateAdded,
+                    date,
                     style: const TextStyle(fontSize: 25.0),
                   ),
                 ),

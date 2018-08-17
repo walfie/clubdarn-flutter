@@ -156,11 +156,13 @@ class SongSearchResult extends StatelessWidget {
           )
         : _textOrNull(song.series);
 
+    final dateAdded = song.dateAdded == "1900/01/01" ? null : song.dateAdded;
+
     final rows = [
       _row(Icon(Icons.music_note), _textOrNull(song.title)),
       _row(Icon(Icons.person), artistName),
       _row(Icon(Icons.local_movies), seriesTitle),
-      _row(Icon(Icons.date_range), _textOrNull(song.dateAdded)),
+      _row(Icon(Icons.date_range), _textOrNull(dateAdded)),
       _row(Icon(Icons.sms), _textOrNull(song.lyrics)),
       _row(Icon(Icons.movie),
           song.hasVideo == true ? Text("Has music video") : null),
